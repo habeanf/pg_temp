@@ -182,6 +182,11 @@ class TempDB(object):
             self.cleanup()
             raise
 
+    def conn_string(self, database='postgres'):
+        """return sqlalchemy connection string for socket"""
+        with check_user() as (run_as, user_name):
+            return "postgres://%s@/%s?host=%s" % (user_name, database, self.pg_socket_dir)
+
     def cleanup(self):
         if self.pg_process:
             self.pg_process.kill()
